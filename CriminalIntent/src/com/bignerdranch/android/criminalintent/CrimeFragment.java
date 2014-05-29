@@ -22,6 +22,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
+import android.widget.ImageButton;
 
 public class CrimeFragment extends Fragment {
 	public static final String EXTRA_CRIME_ID = "com.bignerdranch.android.criminalintent.crime_id";
@@ -33,6 +34,7 @@ public class CrimeFragment extends Fragment {
 	private EditText mTitleField;
 	private Button mDateButton;
 	private CheckBox mSolvedCheckBox;
+	private ImageButton mPhotoButton;
 	
 	private void updateDate() {
 		mDateButton.setText(mCrime.getDate().toString());
@@ -107,6 +109,15 @@ public class CrimeFragment extends Fragment {
 				mCrime.setSolved(isChecked);
 			}
 			
+		});
+		
+		mPhotoButton = (ImageButton) v.findViewById(R.id.crime_imageButton);
+		mPhotoButton.setOnClickListener(new View.OnClickListener() {			
+			@Override
+			public void onClick(View v) {
+				Intent i = new Intent(getActivity(), CrimeCameraActivity.class);
+				startActivity(i);
+			}
 		});
 		
 		return v;
