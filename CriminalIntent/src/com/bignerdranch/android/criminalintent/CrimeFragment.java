@@ -6,6 +6,7 @@ import java.util.UUID;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -119,6 +120,12 @@ public class CrimeFragment extends Fragment {
 				startActivity(i);
 			}
 		});
+		
+		// If camera is not available, disable camera functionality
+		PackageManager pm = getActivity().getPackageManager();
+		if (!pm.hasSystemFeature(PackageManager.FEATURE_CAMERA) && !pm.hasSystemFeature(PackageManager.FEATURE_CAMERA_FRONT)) {
+			mPhotoButton.setEnabled(false);
+		}
 		
 		return v;
 	}
