@@ -14,6 +14,8 @@ public class CrimeCameraActivity extends
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		// Hide the status bar and other OS-level chrome
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+		
+		super.onCreate(savedInstanceState);
 	}
 
 	@Override
