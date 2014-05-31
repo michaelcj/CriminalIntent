@@ -24,6 +24,14 @@ public class CrimeCameraFragment extends Fragment {
 	private SurfaceView mSurfaceView;
 	private View mProgressContainer;
 	
+	private Camera.ShutterCallback mShutterCallback = new Camera.ShutterCallback() {
+		@Override
+		public void onShutter() {
+			// Display the progress indicator
+			mProgressContainer.setVisibility(View.VISIBLE);
+		}
+	};
+	
 	@Override
 	@SuppressWarnings("deprecation")
 	public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
