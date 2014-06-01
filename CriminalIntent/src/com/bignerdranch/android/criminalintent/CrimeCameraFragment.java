@@ -1,9 +1,12 @@
 package com.bignerdranch.android.criminalintent;
 
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
+import java.util.UUID;
 
 import android.annotation.TargetApi;
+import android.content.Context;
 import android.hardware.Camera;
 import android.hardware.Camera.Size;
 import android.os.Build;
@@ -32,6 +35,36 @@ public class CrimeCameraFragment extends Fragment {
 		}
 	};
 	
+	private Camera.PictureCallback mJpegCallback = new Camera.PictureCallback() {
+		@Override
+		public void onPictureTaken(byte[] data, Camera camera) {
+			// Create a filename
+			String filename = UUID.randomUUID().toString() + ".jpg";
+			// Save the jpeg data to disk
+			FileOutputStream os = null;
+			boolean success = true;
+			try {
+				os = getActivity().openFileOutput(filename, Context.MODE_PRIVATE);
+				os.write(data);
+			} catch (Exception e) {
+				Log.e(TAG, "Error writing to file " + filename, e);
+				success = false;
+			} finally {
+				try {
+					if (os != null)
+						os.close();
+				} catch (Exception e) {
+					Log.e(TAG, "Error closing file " + filename, e);
+					success = false;
+				}
+			}
+			
+			if (success) {
+				Log.i(TAG, "JPEG saved at " + filename);
+			}
+		}
+	};
+	
 	@Override
 	@SuppressWarnings("deprecation")
 	public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
@@ -42,10 +75,11 @@ public class CrimeCameraFragment extends Fragment {
 
 		Button takePictureButton = (Button) v.findViewById(R.id.crime_camera_takePictureButton);
 		takePictureButton.setOnClickListener(new View.OnClickListener() {
-			
 			@Override
 			public void onClick(View v) {
-				getActivity().finish();
+				if (mCamera != null) {
+					mCamera.takePicture(mShutterCallback, null, mJpegCallback);
+				}
 			}
 		});
 		
